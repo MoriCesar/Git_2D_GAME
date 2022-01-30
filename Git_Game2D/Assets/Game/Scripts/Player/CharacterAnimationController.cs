@@ -10,7 +10,7 @@ public static class CharacterMovementAnimationKeys
     public const string VerticalSpeed = "VerticalSpeed";
     public const string IsGrounded ="IsGrounded";
 }
-public class PlayerAnimationController : MonoBehaviour
+public class CharacterAnimationController : MonoBehaviour
 {
    Animator animator;
    CharacterMovement2D playerMovement;
