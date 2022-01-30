@@ -11,7 +11,8 @@ public class EnemyAIController : MonoBehaviour
 {
     CharacterMovement2D enemyMovement;
     CharacterFacing2D enemyFacing;
-     public Vector2 movementInput;
+    public Vector2 movementInput;
+    public bool isChasing;
 
 
     // Start is called before the first frame update

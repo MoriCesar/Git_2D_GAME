@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Pada1.BBCore;
 using Pada1.BBCore.Framework;
 using Pada1.BBCore.Tasks;
+using Platformer2D.Character;
 using UnityEngine;
 
 [Action("Game/Patrol")]
@@ -12,16 +13,21 @@ public class Patrol : BasePrimitiveAction
     [InParam("AIController")]
     private EnemyAIController aiController;
 
+       [InParam("PatrolSpeed")]
+    private float patrolSpeed;
+
+    [InParam("CharacterMovement2D")]
+    private CharacterMovement2D charMovement;
+
     public override void OnStart()
     {
         base.OnStart();
-        Debug.Log("Patrol: OnStart");
         aiController.StartCoroutine(TEMP_Walk());
+        charMovement.MaxGroundSpeed = patrolSpeed;
     }
 
     public override TaskStatus OnUpdate()
     {
-        Debug.Log("Patrol: OnUpdate");
         return TaskStatus.RUNNING;
     }
 
