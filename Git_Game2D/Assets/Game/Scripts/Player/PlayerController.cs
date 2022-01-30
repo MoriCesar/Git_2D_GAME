@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer spriteRenderer;
     PlayerInput playerInput;
 
-    public Sprite crouchedSprite;
-    public Sprite idleSprite;
-
     [Header("Camera")]
     public Transform cameraTarget;
     [Range(0.0f,5.0f)]
@@ -64,16 +61,10 @@ public class PlayerController : MonoBehaviour
         if (playerInput.IsCrouchButtonDown())
         { 
             playerMovement.Crouch();
-
-            // TODO Remover
-            spriteRenderer.sprite = crouchedSprite;
         }
         else if (playerInput.IsCrouchButtonUp())
         { 
             playerMovement.UnCrouch();
-
-            // TODO Remover
-            spriteRenderer.sprite = idleSprite;
         }
     }
 
