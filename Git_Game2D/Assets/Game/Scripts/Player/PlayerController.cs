@@ -16,6 +16,16 @@ public class PlayerController : MonoBehaviour
     public Sprite crouchedSprite;
     public Sprite idleSprite;
 
+    [Header("Camera")]
+    public Transform cameraTarget;
+    [Range(0.0f,5.0f)]
+    public float cameraTargetOffsetX = 2.0f;
+    [Range(0.5f,50.0f)]
+    public float cameraTargetFlipSpeed = 2.0f;
+    [Range(0.0f,5.0f)]
+    public float characterSpeedInfluence = 2.0f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +49,7 @@ public class PlayerController : MonoBehaviour
         { 
             spriteRenderer.flipX = true;
         }
+
         // Pulo
         if (playerInput.IsJumpButtonDown())
         { 
@@ -64,5 +75,19 @@ public class PlayerController : MonoBehaviour
             // TODO Remover
             spriteRenderer.sprite = idleSprite;
         }
+    }
+
+    private void FixedUpdate()
+    { 
+        // Controle do target da camera dependendo da direcao e da velocidade do jogador
+        bool isFacingright = spriteRenderer.flipX == false;
+        float targetOffsetX = isFacingright ? cameraTargetOffsetX : -cameraTargetOffsetX;
+
+        float currentOffsetX = Mathf.Lerp(cameraTarget.localPosition.x, targetOffsetX, Time.fixedDeltaTime * cameraTargetFlipSpeed);
+
+        currentOffsetX += playerMovement.CurrentVelocity.x * Time.fixedDeltaTime * characterSpeedInfluence;
+
+        cameraTarget.localPosition = new Vector3(currentOffsetX, cameraTarget.localPosition.y, cameraTarget.localPosition.z);
+        //
     }
 }
