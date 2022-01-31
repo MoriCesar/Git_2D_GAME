@@ -6,12 +6,15 @@ using Platformer2D.Character;
 [RequireComponent(typeof(CharacterMovement2D))]
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterFacing2D))]
+[RequireComponent(typeof(IDamageable))]
 
 public class PlayerController : MonoBehaviour
 {
     CharacterMovement2D playerMovement;
     CharacterFacing2D playerFacing;
     PlayerInput playerInput;
+    IDamageable damageable;
+
 
     [Header("Camera")]
     
@@ -35,6 +38,17 @@ public class PlayerController : MonoBehaviour
 
         playerInput = GetComponent<PlayerInput>();
         playerFacing = GetComponent<CharacterFacing2D>();
+        damageable = GetComponent<IDamageable>();
+
+        damageable.DeathEvent += OnDeath;
+    }
+
+    private void OnDestroy()
+    { 
+        if (damageable != null)
+        { 
+            damageable.DeathEvent -= OnDeath;
+        }
     }
 
     // Update is called once per frame
@@ -79,5 +93,12 @@ public class PlayerController : MonoBehaviour
 
         cameraTarget.localPosition = new Vector3(currentOffsetX, cameraTarget.localPosition.y, cameraTarget.localPosition.z);
         //
+    }
+
+    private void OnDeath()
+    { 
+        // Morrer c/ dano
+        playerMovement.StopImmediately();
+        enabled = false;
     }
 }

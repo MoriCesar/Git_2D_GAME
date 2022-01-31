@@ -24,11 +24,28 @@ public class IsTargetVisible : GOCondition
 
     public override bool Check()
     {
-        if(aiVision.IsVisible(target))
+        bool isAvailable = IsAvailable();
+
+        if(aiVision.IsVisible(target) && isAvailable)
         { 
             forgetTargetTime = Time.time + TargetMemoryDuration;
             return true;
         }
-        return Time.time < forgetTargetTime;
+        return Time.time < forgetTargetTime && isAvailable;
+    }
+
+    private bool IsAvailable()
+    { 
+        if (target == null)
+        { 
+            return false;
+        }
+        // TODO: nao chamar GetComponent no Update
+        IDamageable damageable = target.GetComponent<IDamageable>();
+        if (damageable != null)
+        { 
+            return !damageable.IsDead;
+        }
+        return true;
     }
 }
