@@ -5,12 +5,16 @@ using Platformer2D.Character;
 
 [RequireComponent(typeof(CharacterMovement2D))]
 [RequireComponent(typeof(CharacterFacing2D))]
-
+[RequireComponent(typeof(IDamageable))]
 
 public class EnemyAIController : MonoBehaviour
 {
     CharacterMovement2D enemyMovement;
     CharacterFacing2D enemyFacing;
+    IDamageable damageable;
+
+    [SerializeField]
+    private TriggerDamage damager;
     private Vector2 movementInput;
     private bool isChasing;
 
@@ -32,6 +36,16 @@ public class EnemyAIController : MonoBehaviour
     {
         enemyMovement = GetComponent<CharacterMovement2D>();
         enemyFacing = GetComponent<CharacterFacing2D>();
+        damageable = GetComponent<IDamageable>();
+        damageable.DeathEvent += OnDeath;
+    }
+
+    private void OnDestroy()
+    { 
+        if(damageable != null)
+        { 
+            damageable.DeathEvent -= OnDeath;
+        }
     }
 
     // Update is called once per frame
@@ -39,5 +53,13 @@ public class EnemyAIController : MonoBehaviour
     {
         enemyMovement.ProcessMovementInput(movementInput);
         enemyFacing.UpdateFacing(movementInput);
+    }
+
+    private void OnDeath()
+    { 
+        enabled = false;
+        enemyMovement.StopImmediately();
+        damager.gameObject.SetActive(false);
+        Destroy(gameObject,0.8f);
     }
 }
